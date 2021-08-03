@@ -3,24 +3,35 @@
         "model": "levelupapi.game",
         "pk": 1,
         "fields": {
-            "name": "Monopoly",
-            "game_type": 1,
-            "description": "Board game about real estate",
-            "number_of_players": 4,
+            "name": "Welcome To",
+            "maker": "Benoit Turpin",
             "gamer": 1,
-            "maker": "me@me.com"
+            "game_type": 1,
+            "number_of_players": 4
+
         }
     },
     {
         "model": "levelupapi.game",
         "pk": 2,
         "fields": {
-            "name": "D&D",
-            "game_type": 2,
-            "description": "Game About Wizards And Thangs",
-            "number_of_players": 8,
+            "name": "Settlers of Catan",
+            "maker": "Klaus Teuber",
             "gamer": 1,
-            "maker": "me@me.com"
+            "game_type": 1,
+            "number_of_players": 4
+
+        }
+    },
+    {
+        "model": "levelupapi.game",
+        "pk": 3,
+        "fields": {
+            "name": "Dungeons & Dragons",
+            "maker": "Wizards of the Coast",
+            "gamer": 1,
+            "game_type": 2,
+            "number_of_players": 5
         }
     }
 ]
