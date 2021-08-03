@@ -1,0 +1,16 @@
+
+[
+    {
+        "model": "levelupapi.event",
+        "pk": 1,
+        "fields": {
+            "host": 1,
+            "game": 2,
+            "date": "2021-09-15",
+            "time": "8:30pm",
+            "description": "Dungeons And Dragons",
+            "title": "Game Night!",
+            "attendees": [1]
+        }
+    }
+]

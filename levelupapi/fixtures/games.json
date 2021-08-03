@@ -1,0 +1,26 @@
+[
+    {
+        "model": "levelupapi.game",
+        "pk": 1,
+        "fields": {
+            "name": "Monopoly",
+            "game_type": 1,
+            "description": "Board game about real estate",
+            "number_of_players": 4,
+            "gamer": 1,
+            "maker": "me@me.com"
+        }
+    },
+    {
+        "model": "levelupapi.game",
+        "pk": 2,
+        "fields": {
+            "name": "D&D",
+            "game_type": 2,
+            "description": "Game About Wizards And Thangs",
+            "number_of_players": 8,
+            "gamer": 1,
+            "maker": "me@me.com"
+        }
+    }
+]
