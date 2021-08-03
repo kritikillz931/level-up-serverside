@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from levelupapi.models import Game, Event, Gamer
 from levelupapi.views.game import GameSerializer
-from levelupapi.views.event import EventGamerSerializer
+
 
 
 class EventView(ViewSet):
@@ -106,16 +106,9 @@ class EventView(ViewSet):
         serializer = EventSerializer(
             events, many=True, context={'request': request})
         return Response(serializer.data)
-        
-class EventSerializer(serializers.ModelSerializer):
-    """JSON serializer for events"""
-    organizer = EventGamerSerializer(many=False)
-    game = GameSerializer(many=False)
+     
 
-class Meta:
-    model = Event
-    fields = ('id', 'game', 'organizer',
-                  'description', 'date', 'time')
+
 
 class EventUserSerializer(serializers.ModelSerializer):
     """JSON serializer for event organizer's related Django user"""
@@ -124,16 +117,26 @@ class EventUserSerializer(serializers.ModelSerializer):
         fields = ['first_name', 'last_name', 'email']
 
 
-    class EventGamerSerializer(serializers.ModelSerializer):
-        """JSON serializer for event organizer"""
-        user = EventUserSerializer(many=False)
+class EventGamerSerializer(serializers.ModelSerializer):
+    """JSON serializer for event organizer"""
+    user = EventUserSerializer(many=False)
 
-        class Meta:
-            model = Gamer
-            fields = ['user']
+    class Meta:
+        model = Gamer
+        fields = ['user']
 
     class GameSerializer(serializers.ModelSerializer):
         """JSON serializer for games"""
         class Meta:
             model = Game
             fields = ('id', 'title', 'maker', 'number_of_players', 'skill_level')
+
+class EventSerializer(serializers.ModelSerializer):
+    """JSON serializer for events"""
+    organizer = EventGamerSerializer(many=False)
+    game = GameSerializer(many=False)
+
+    class Meta:
+        model = Event
+        fields = ('id', 'game', 'organizer',
+                  'description', 'date', 'time')
