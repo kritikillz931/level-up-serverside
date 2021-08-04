@@ -6,6 +6,7 @@
             "name": "Welcome To",
             "maker": "Benoit Turpin",
             "gamer": 1,
+            "description": "yeet",
             "game_type": 1,
             "number_of_players": 4
 
@@ -19,6 +20,7 @@
             "maker": "Klaus Teuber",
             "gamer": 1,
             "game_type": 1,
+            "description": "yeet",
             "number_of_players": 4
 
         }
@@ -31,6 +33,7 @@
             "maker": "Wizards of the Coast",
             "gamer": 1,
             "game_type": 2,
+            "description": "yeet",
             "number_of_players": 5
         }
     }

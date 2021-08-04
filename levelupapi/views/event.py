@@ -1,5 +1,5 @@
 """View module for handling requests about events"""
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User #pylint:disable=(imported-auth-user) 
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseServerError
 from rest_framework import status
@@ -49,7 +49,7 @@ class EventView(ViewSet):
             event = Event.objects.get(pk=pk)
             serializer = EventSerializer(event, context={'request': request})
             return Response(serializer.data)
-        except Exception:
+        except Exception as ex:
             return HttpResponseServerError(ex)
 
     def update(self, request, pk=None):

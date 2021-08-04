@@ -25,10 +25,10 @@ class GameView(ViewSet):
         # and set its properties from what was sent in the
         # body of the request from the client.
         game = Game()
-        game.title = request.data["title"]
+        game.name = request.data["name"]
         game.maker = request.data["maker"]
         game.number_of_players = request.data["numberOfPlayers"]
-        game.skill_level = request.data["skillLevel"]
+        game.description = request.data["description"]
         game.gamer = gamer
 
         # Use the Django ORM to get the record from the database
@@ -83,10 +83,10 @@ class GameView(ViewSet):
         # creating a new instance of Game, get the game record
         # from the database whose primary key is `pk`
         game = Game.objects.get(pk=pk)
-        game.title = request.data["title"]
+        game.name = request.data["name"]
         game.maker = request.data["maker"]
         game.number_of_players = request.data["numberOfPlayers"]
-        game.skill_level = request.data["skillLevel"]
+        game.description = request.data["description"]
         game.gamer = gamer
 
         game_type = GameType.objects.get(pk=request.data["gameTypeId"])
