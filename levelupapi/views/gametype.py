@@ -16,11 +16,11 @@ class GameTypeView(ViewSet):
             Response -- JSON serialized game type
         """
         try:
-            game_type = GameType.objects.get(pk=pk)
-            serializer = GameTypeSerializer(game_type, context={'request': request})
-            return Response(serializer.data)
+            game_type = GameType.objects.get(pk=pk) #grabs game type id from url
+            serializer = GameTypeSerializer(game_type, context={'request': request}) #passing in that game type object and conv. to json
+            return Response(serializer.data) #returns json string
         except Exception as ex:
-            return HttpResponseServerError(ex)
+            return HttpResponseServerError(ex)# returns error if needed
 
     def list(self, request):
         """Handle GET requests to get all game types

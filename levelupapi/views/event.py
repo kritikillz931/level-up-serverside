@@ -27,9 +27,9 @@ class EventView(ViewSet):
         event.time = request.data["time"]
         event.date = request.data["date"]
         event.description = request.data["description"]
-        event.organizer = gamer
+        event.host = gamer
 
-        game = Game.objects.get(pk=request.data["gameId"])
+        game = Game.objects.get(pk=request.data["game"])
         event.game = game
 
         try:
@@ -58,13 +58,13 @@ class EventView(ViewSet):
         Returns:
             Response -- Empty body with 204 status code
         """
-        organizer = Gamer.objects.get(user=request.auth.user)
+        host = Gamer.objects.get(user=request.auth.user)
 
         event = Event.objects.get(pk=pk)
         event.description = request.data["description"]
         event.date = request.data["date"]
         event.time = request.data["time"]
-        event.organizer = organizer
+        event.host = host
 
         game = Game.objects.get(pk=request.data["gameId"])
         event.game = game
@@ -107,18 +107,53 @@ class EventView(ViewSet):
             events, many=True, context={'request': request})
         return Response(serializer.data)
      
+    @action(methods=['post', 'delete'], detail=True)
+    def signup(self, request, pk=None):
+        """Managing gamers signing up for events"""
+        # Django uses the `Authorization` header to determine
+        # which user is making the request to sign up
+        gamer = Gamer.objects.get(user=request.auth.user)
+        
+        try:
+            # Handle the case if the client specifies a game
+            # that doesn't exist
+            event = Event.objects.get(pk=pk)
+        except Event.DoesNotExist:
+            return Response(
+                {'message': 'Event does not exist.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
+        # A gamer wants to sign up for an event
+        if request.method == "POST":
+            try:
+                # Using the attendees field on the event makes it simple to add a gamer to the event
+                # .add(gamer) will insert into the join table a new row the gamer_id and the event_id
+                event.attendees.add(gamer)
+                return Response({}, status=status.HTTP_201_CREATED)
+            except Exception as ex:
+                return Response({'message': ex.args[0]})
+
+        # User wants to leave a previously joined event
+        elif request.method == "DELETE":
+            try:
+                # The many to many relationship has a .remove method that removes the gamer from the attendees list
+                # The method deletes the row in the join table that has the gamer_id and event_id
+                event.attendees.remove(gamer)
+                return Response(None, status=status.HTTP_204_NO_CONTENT)
+            except Exception as ex:
+                return Response({'message': ex.args[0]})                  
 
 
 class EventUserSerializer(serializers.ModelSerializer):
-    """JSON serializer for event organizer's related Django user"""
+    """JSON serializer for event host's related Django user"""
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
 
 
 class EventGamerSerializer(serializers.ModelSerializer):
-    """JSON serializer for event organizer"""
+    """JSON serializer for event host"""
     user = EventUserSerializer(many=False)
 
     class Meta:
@@ -133,10 +168,11 @@ class EventGamerSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     """JSON serializer for events"""
-    organizer = EventGamerSerializer(many=False)
+    host = EventGamerSerializer(many=False)
     game = GameSerializer(many=False)
 
     class Meta:
         model = Event
-        fields = ('id', 'game', 'organizer',
+        fields = ('id', 'game', 'host',
                   'description', 'date', 'time')
+
