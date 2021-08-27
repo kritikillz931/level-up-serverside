@@ -6,6 +6,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers 
 from levelupapi.models import Game, GameType, Gamer
+from rest_framework import status
 
 
 class GameView(ViewSet):
@@ -34,7 +35,7 @@ class GameView(ViewSet):
         # Use the Django ORM to get the record from the database
         # whose `id` is what the client passed as the
         # `gameTypeId` in the body of the request.
-        game_type = GameType.objects.get(pk=request.data["gameTypeId"])
+        game_type = GameType.objects.get(pk=request.data["gameType"])
         game.game_type = game_type
 
         # Try to save the new game to the database, then
@@ -43,7 +44,7 @@ class GameView(ViewSet):
         try:
             game.save()
             serializer = GameSerializer(game, context={'request': request})
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         # If anything went wrong, catch the exception and
         # send a response with a 400 status code to tell the
@@ -68,6 +69,8 @@ class GameView(ViewSet):
             game = Game.objects.get(pk=pk)
             serializer = GameSerializer(game, context={'request': request})
             return Response(serializer.data)
+        except Game.DoesNotExist as ex:
+            return Response(ex.args[0], status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
             return HttpResponseServerError(ex)
 
@@ -140,7 +143,24 @@ class GameSerializer(serializers.ModelSerializer):
     """JSON serializer for games
 
     Arguments:
-        serializer type
+        serializer typeINSERT INTO levelupapi_game (
+            id,
+            name,
+            description,
+            number_of_players,
+            maker,
+            game_type_id,
+            gamer_id
+          )
+        VALUES (
+            id:integer,
+            'name:varchar(100)',
+            'description:varchar(150)',
+            number_of_players:integer,
+            'maker:varchar(50)',
+            'game_type_id:bigint',
+            'gamer_id:bigint'
+          );
     """
     class Meta:
         model = Game

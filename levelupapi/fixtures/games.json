@@ -1,4 +1,21 @@
-[
+INSERT INTO levelupapi_game (
+    id,
+    name,
+    description,
+    number_of_players,
+    maker,
+    game_type,
+    gamer_id
+  )
+VALUES (
+    id:integer,
+    'name:varchar(100)',
+    'description:varchar(150)',
+    number_of_players:integer,
+    'maker:varchar(50)',
+    'game_type:bigint',
+    'gamer_id:bigint'
+  );[
     {
         "model": "levelupapi.game",
         "pk": 1,
